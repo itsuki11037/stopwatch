@@ -1,10 +1,16 @@
 {
+    "name": "stop-watch",
+    "version": "1.0.0",
+    "description": "以下の環境をサポートするボイラープレートです * [Vue](https://jp.vuejs.org/) * [pug](https://pugjs.org/) * [sass](http://sass-lang.com/) * [TypeScript](https://www.typescriptlang.org/)",
+    "main": "webpack.addpage.babel.js",
     "scripts": {
         "clean": "./scripts.sh clean",
         "build": "./scripts.sh build",
         "dev": "./scripts.sh dev",
         "test": "echo \"Error: no test specified\" && exit 1"
     },
+    "author": "",
+    "license": "ISC",
     "dependencies": {
         "buefy": "^0.6.3",
         "vue": "^2.5.13",
