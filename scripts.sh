@@ -117,6 +117,12 @@ function add_vue() {
     echo "import VueUtil from '@/scripts/util/VueUtil';"             >> "./src/components/${filepath}${filename}.vue"
     if [ "$is_root" = "true" ]; then
     echo "import RootVue from '@/components/base/RootVue';"          >> "./src/components/${filepath}${filename}.vue"
+    echo ""                                                          >> "./src/components/${filepath}${filename}.vue"
+    echo "import 'mdi/scss/materialdesignicons.scss';"               >> "./src/components/${filepath}${filename}.vue"
+    echo "import Buefy from 'buefy';"                                >> "./src/components/${filepath}${filename}.vue"
+    echo "import 'buefy/lib/buefy.min.css';"                         >> "./src/components/${filepath}${filename}.vue"
+    echo ""                                                          >> "./src/components/${filepath}${filename}.vue"
+    echo "Vue.use(Buefy);"                                           >> "./src/components/${filepath}${filename}.vue"
     else
     echo "import BuefyVue from '@/components/base/BuefyVue';"        >> "./src/components/${filepath}${filename}.vue"
     fi
