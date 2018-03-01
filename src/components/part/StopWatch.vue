@@ -2,105 +2,98 @@
 .vue-stop-watch
     h1 StopWatch
 
-    p.time 00:00:00:00
+    p.time.columns.is-centered
+        span.column.is-2 {{ String(hour).padStart(2, '0') }}
+        span.column.is-narrow :
+        span.column.is-2 {{ String(min).padStart(2, '0') }}
+        span.column.is-narrow :
+        span.column.is-2 {{ String(sec).padStart(2, '0') }}
+        span.column.is-narrow :
+        span.column.is-2 {{ String(msec).padStart(2, '0') }}
 
-    div.row
-    button.a START
-    button.b STOP
-    button.c RESET
-
+    .columns.is-centered
+        .column.is-narrow: button.button.is-primary(@click='timerStart') START
+        .column.is-narrow: button.button.is-danger(@click='timerStop') STOP
+        .column.is-narrow: button.button.is-warning(@click='timerReset') RESET
 </template>
 
 <script lang='ts'>
 import { Vue, Component } from 'vue-property-decorator';
 import VueUtil from '@/scripts/util/VueUtil';
 import BuefyVue from '@/components/base/BuefyVue';
+import { setInterval, clearInterval } from 'timers';
 
 /**
  * Vue Component
  */
 @Component
 export default class StopWatch extends BuefyVue {
+    private timerId: NodeJS.Timer | null = null;
+    private count: number = 0;
+
+    private msec: number = 0;
+    private sec: number = 0;
+    private min: number = 0;
+    private hour: number = 0;
+
+
+    private timerStart(): void {
+        this.timerId = setInterval(this.countup, 10);
+    }
+
+    private timerStop(): void {
+        if (this.timerId == null) {
+            return;
+        }
+        clearInterval(this.timerId);
+    }
+
+    private timerReset(): void {
+             this.timerId = null
+             this.msec = 0;
+             this.sec  = 0;
+             this.min  = 0;
+             this. hour = 0;
+
+    }
+
+    private countup():void {
+        this.msec++;
+
+        if (this.msec > 99) {
+            this.msec = 0;
+            this.sec++;
+        }
+
+        if (this.sec > 59) {
+            this.sec = 0;
+            this.min++;
+        }
+
+        if (this.min > 59) {
+            this.min = 0;
+            this.hour++;
+        }
+    }
 }
 
-// var timerId;
-// var count = 0;
-
-// var msec = 0;
-// var sec = 0;
-// var min = 0;
-// var hour = 0;
-
-// var msecNumber;
-// var secNumber;
-// var minNumber;
-// var hourNumber;
-
-// function countup() {
-//     msec += 1;
-//     if (msec > 99) {
-//         msec = 0;
-//         sec += 1;
-//     }
-
-//     if (sec > 59) {
-//         sec = 0;
-//         min += 1;
-//     }
-
-//     if (min > 59) {
-//         min = 0;
-//         hour += 1;
-//     }
-
-//     msecNumber = msec;
-
-//     if (sec < 10) {
-//         secNumber = '0' + sec.toString();
-//     } else {
-//         secNumber = sec;
-//     }
-
-
-//     if (min < 10) {
-//         minNumber = '0' + min.toString();
-//     } else {
-//         minNumber = min;
-//     }
-
-//     if (hour < 10) {
-//         hourNumber = '0' + hour.toString();
-//     } else {
-//         hourNumber = hour;
-//     }
-
-//     $('#time').html(hourNumber + ':' + minNumber + ':' + secNumber + ':' + msecNumber);
-// }
-
-// function onKeyClick(key) {
-//     if(typeof key == String.name.toLowerCase()){
-//         switch (key) {
-//             case 'a':{
-//                 timerId = setInterval(countup, 10);
-//                 break;
-//              }
-
-//                 case 'b':
-//                 clearInterval(timerId);
-//                 break;
-
-//                 case 'c':
-//                 msec = 0;
-//                 sec  = 0;
-//                 min  = 0;
-//                 hour = 0;
-//                 $('#time').html('00:00:00:00')
-//                 break;
-//         }
-//     }
-// }
 </script>
 
 <style lang='sass' scoped>
+@import '~bulma'
+
 .vue-stop-watch
+    max-width: 700px
+    width: 80%
+    margin: 0 auto
+
+    .time
+        margin: 16px auto
+
+        & > span
+            text-align: center
+            font-size: $size-1
+
+    h1
+        font-size: 40px
 </style>

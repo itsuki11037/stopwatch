@@ -13,6 +13,7 @@
     "license": "ISC",
     "dependencies": {
         "buefy": "^0.6.3",
+        "mdi": "^2.1.19",
         "vue": "^2.5.13",
         "vue-property-decorator": "^6.0.0"
     },
@@ -35,6 +36,7 @@
         "style-loader": "^0.19.1",
         "ts-loader": "^3.4.0",
         "typescript": "^2.7.1",
+        "url-loader": "^0.6.2",
         "vue-loader": "^14.1.1",
         "vue-style-loader": "^3.1.2",
         "vue-template-compiler": "^2.5.13",
