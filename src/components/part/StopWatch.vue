@@ -19,17 +19,16 @@
             button.button.is-warning(v-if='timerId == null' @click='reset') RESET
             button.button.is-info(v-if='timerId != null' @click='recordLaptime') LAPTIME
 
-
     p LAP-TIME
     p.laptime.time.columns.is-mobile.is-centered.is-gapless(
             v-for="laptime, i in laptimes" :key='i')
-        span.column {{ String(laptime.hour).padStart(2, '0') }}
-        span.column.is-narrow :
-        span.column {{ String(laptime.min).padStart(2, '0') }}
-        span.column.is-narrow :
-        span.column {{ String(laptime.sec).padStart(2, '0') }}
-        span.column.is-narrow :
-        span.column {{ String(laptime.msec).padStart(2, '0') }}
+        | {{ String(laptime.hour).padStart(2, '0') }}
+        | :
+        | {{ String(laptime.min).padStart(2, '0') }}
+        | :
+        | {{ String(laptime.sec).padStart(2, '0') }}
+        | :
+        | {{ String(laptime.msec).padStart(2, '0') }}
 </template>
 
 <script lang='ts'>
@@ -134,8 +133,5 @@ export default class StopWatch extends BuefyVue implements Time {
 
         button
             font-size: 3vw
-
-    .laptime
-        list-style: none;
 
 </style>
