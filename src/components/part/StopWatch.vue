@@ -2,19 +2,34 @@
 .vue-stop-watch
     h1 StopWatch
 
-    p.time.columns.is-centered
-        span.column.is-2 {{ String(hour).padStart(2, '0') }}
+    p.time.columns.is-mobile.is-centered.is-gapless
+        span.column {{ String(hour).padStart(2, '0') }}
         span.column.is-narrow :
-        span.column.is-2 {{ String(min).padStart(2, '0') }}
+        span.column {{ String(min).padStart(2, '0') }}
         span.column.is-narrow :
-        span.column.is-2 {{ String(sec).padStart(2, '0') }}
+        span.column {{ String(sec).padStart(2, '0') }}
         span.column.is-narrow :
-        span.column.is-2 {{ String(msec).padStart(2, '0') }}
+        span.column {{ String(msec).padStart(2, '0') }}
 
-    .columns.is-centered
-        .column.is-narrow: button.button.is-primary(@click='timerStart') START
-        .column.is-narrow: button.button.is-danger(@click='timerStop') STOP
-        .column.is-narrow: button.button.is-warning(@click='timerReset') RESET
+    .columns.is-mobile.is-centered
+        .column.is-narrow.alt
+            button.button.is-primary(v-if='timerId == null' @click='start') START
+            button.button.is-danger(v-if='timerId != null' @click='stop') STOP
+        .column.is-narrow.alt
+            button.button.is-warning(v-if='timerId == null' @click='reset') RESET
+            button.button.is-info(v-if='timerId != null' @click='recordLaptime') LAPTIME
+
+
+    p LAP-TIME
+    p.laptime.time.columns.is-mobile.is-centered.is-gapless(
+            v-for="laptime, i in laptimes" :key='i')
+        span.column {{ String(laptime.hour).padStart(2, '0') }}
+        span.column.is-narrow :
+        span.column {{ String(laptime.min).padStart(2, '0') }}
+        span.column.is-narrow :
+        span.column {{ String(laptime.sec).padStart(2, '0') }}
+        span.column.is-narrow :
+        span.column {{ String(laptime.msec).padStart(2, '0') }}
 </template>
 
 <script lang='ts'>
@@ -23,38 +38,54 @@ import VueUtil from '@/scripts/util/VueUtil';
 import BuefyVue from '@/components/base/BuefyVue';
 import { setInterval, clearInterval } from 'timers';
 
+interface Time {
+    msec: number;
+    sec: number;
+    min: number;
+    hour: number;
+}
+
 /**
  * Vue Component
  */
 @Component
-export default class StopWatch extends BuefyVue {
+export default class StopWatch extends BuefyVue implements Time {
     private timerId: NodeJS.Timer | null = null;
-    private count: number = 0;
 
-    private msec: number = 0;
-    private sec: number = 0;
-    private min: number = 0;
-    private hour: number = 0;
+    public msec: number = 0;
+    public sec: number = 0;
+    public min: number = 0;
+    public hour: number = 0;
 
+    private laptimes: Time[] = [];
 
-    private timerStart(): void {
+    private start(): void {
         this.timerId = setInterval(this.countup, 10);
     }
 
-    private timerStop(): void {
+    private stop(): void {
         if (this.timerId == null) {
             return;
         }
         clearInterval(this.timerId);
+        this.timerId = null;
     }
 
-    private timerReset(): void {
-             this.timerId = null
-             this.msec = 0;
-             this.sec  = 0;
-             this.min  = 0;
-             this. hour = 0;
+    private reset(): void {
+        this.timerId = null
+        this.msec = 0;
+        this.sec  = 0;
+        this.min  = 0;
+        this.hour = 0;
+    }
 
+    private recordLaptime(): void {
+        this.laptimes.push({
+            hour: this.hour,
+            min: this.min,
+            sec: this.sec,
+            msec: this.msec
+        });
     }
 
     private countup():void {
@@ -96,4 +127,15 @@ export default class StopWatch extends BuefyVue {
 
     h1
         font-size: 40px
+
+    @media screen and (max-width: $tablet)
+        .time > span
+            font-size: 8vw
+
+        button
+            font-size: 3vw
+
+    .laptime
+        list-style: none;
+
 </style>
